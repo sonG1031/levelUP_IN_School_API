@@ -1,0 +1,5 @@
+.idea
+dev.db
+*.pyc
+__pycache__
+migrationsx2x

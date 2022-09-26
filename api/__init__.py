@@ -15,8 +15,9 @@ def create_app(): # <-- 애플리케이션 팩토리
     # ORM
     db.init_app(app)
     migrate.init_app(app, db)
+    from . import models
 
-    from .route import  auth
+    from .route import auth
     app.register_blueprint(auth.bp)
 
     return app

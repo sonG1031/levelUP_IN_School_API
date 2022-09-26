@@ -17,7 +17,8 @@
 ### pip install List
 > pip install flask  
 > pip install flask-migrate  
-> 
+> pip install bcrypt  
+> pip install pyjwt
 
 ### 기억해둘것
 > ORM은 데이터베이스에 데이터를 저장하는 테이블을 파이썬 클래스로 만들어 관리하는 기술로 이해해도 좋다.  
@@ -27,5 +28,7 @@
 > flask db init 명령으로 데이터베이스를 초기화  
 > flask db init 명령은 데이터베이스를 관리하는 초기 파일들을 다음처럼 migrations 디렉터리에 자동으로 생성한다.  
 > flask db migrate : 모델을 새로 생성하거나 변경할 때 사용 (실행하면 작업파일이 생성된다.)  
-> flask db upgrade : 모델의 변경 내용을 실제 데이터베이스에 적용할 때 사용 (위에서 생성된 작업파일을 실행하여 데이터베이스를 변경한다.)
-> 
+> flask db upgrade : 모델의 변경 내용을 실제 데이터베이스에 적용할 때 사용 (위에서 생성된 작업파일을 실행하여 데이터베이스를 변경한다.)  
+> 모델 클래스는 db.Model 클래스를 상속하여 만들어야 한다.  
+>  모델을 서로 연결할 때에는 위와 같이 db.ForeignKey를 사용.  
+> 데이터베이스에서는 기존 모델과 연결된 속성을 외부 키(foreign key)라고 한다.
