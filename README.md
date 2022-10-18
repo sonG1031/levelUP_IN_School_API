@@ -19,6 +19,7 @@
 > pip install flask-migrate  
 > pip install bcrypt  
 > pip install pyjwt
+>  pip install paho-mqtt
 
 ### 기억해둘것
 > ORM은 데이터베이스에 데이터를 저장하는 테이블을 파이썬 클래스로 만들어 관리하는 기술로 이해해도 좋다.  

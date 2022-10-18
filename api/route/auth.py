@@ -4,6 +4,7 @@ from api import db
 from api.models import User, School
 
 import bcrypt, jwt
+from config import JWT_SECRET_KEY
 # from config import JWT_SECRET_KEY, IS_CAM_KEY
 from functools import wraps
 from datetime import datetime
@@ -45,5 +46,42 @@ def singnup():
             'data': {}
         })
 
+@bp.route('/login/', methods=['POST'])
+def login():
+    error = None
+    user = User.query.filter_by(user_id = request.json["user_id"]).first()
 
-# http -v POST http://127.0.0.1:5000/auth/singnup/ user_id="test", username="홍길동", password="test1234", email="test@naver.com", job="학생", school_code="없음"
+    if not user:
+        error = "존재하지 않는 사용자입니다."
+    elif not bcrypt.checkpw(request.json['password'].encode('utf-8'), user.password.encode('utf-8')):
+        error = "비밀번호가 올바르지 않습니다."
+
+    if error is None:
+        payload = {
+            "user_id" : user.user_id,
+            "username" : user.username,
+            "password" : user.password
+        }
+        token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
+        body = json.dumps({
+            "code": 1,
+            "msg": "로그인에 성공하셨습니다.",
+            "data": {
+                "id": user.id,
+                "username": user.username,
+                "password": user.password,
+                "user_id": user.user_id
+            }
+        }, ensure_ascii=False)
+
+        db.session.remove()
+        response = Response(body)
+        response.headers['authorization'] = token
+        return response
+
+    return jsonify({
+        "code": -1,
+        "msg": error,
+        "data": {}
+    })
+# http -v POST http://127.0.0.1:5000/auth/singnup/ user_id="test" username="홍길동" password="test1234" email="test@naver.com" job="학생" school_code='qV8ugGBVT3'
