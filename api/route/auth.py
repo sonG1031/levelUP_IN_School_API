@@ -37,7 +37,6 @@ def singnup():
         return jsonify({
             'code': 1,
             'msg': "회원가입 성공!",
-            'data': {}
         })
     else:
         return jsonify({
@@ -82,6 +81,5 @@ def login():
     return jsonify({
         "code": -1,
         "msg": error,
-        "data": {}
     })
-# http -v POST http://127.0.0.1:5000/auth/singnup/ user_id="test" username="홍길동" password="test1234" email="test@naver.com" job="학생" school_code='qV8ugGBVT3'
+# http -v POST http://43.201.142.6:5000/auth/singnup/ user_id="test" username="홍길동" password="test1234" email="test@naver.com" job="학생" school_code='qV8ugGBVT3'

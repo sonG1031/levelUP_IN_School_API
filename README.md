@@ -18,7 +18,7 @@
 > pip install flask  
 > pip install flask-migrate  
 > pip install bcrypt  
-> pip install pyjwt
+> pip install pyjwt  
 >  pip install paho-mqtt
 
 ### 기억해둘것
