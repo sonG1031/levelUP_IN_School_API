@@ -40,7 +40,7 @@ def singnup():
         })
     else:
         return jsonify({
-            'code': 0,
+            'code': -1,
             'msg': "학교코드가 잘못되었거나 아이디가 사용중입니다.",
         })
 
