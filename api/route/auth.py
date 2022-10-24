@@ -9,6 +9,8 @@ from config import JWT_SECRET_KEY
 from functools import wraps
 from datetime import datetime
 
+from email_validator import validate_email, EmailNotValidError
+
 bp = Blueprint('auth', __name__, url_prefix='/auth') # URL과 함수의 매핑을 관리하기 위해 사용하는 도구(클래스)
 
 
@@ -16,7 +18,15 @@ bp = Blueprint('auth', __name__, url_prefix='/auth') # URL과 함수의 매핑�
 def singnup():
     user = User.query.filter_by(user_id = request.json["user_id"]).first()
     school = School.query.filter_by(school_code = request.json["school_code"]).first()
-    if not user and school:
+    error = None
+    if user:
+        error = "아이디가 사용중입니다."
+    elif not school:
+        error = "존재하지 않는 학교코드입니다."
+    elif not check_email(request.json["email"]):
+        error = "이메일이 잘못되었습니다."
+
+    if error is None:
         user_id = request.json["user_id"]
         username = request.json["username"]
         password = bcrypt.hashpw(request.json['password'].encode("utf-8"), bcrypt.gensalt())
@@ -41,7 +51,7 @@ def singnup():
     else:
         return jsonify({
             'code': -1,
-            'msg': "학교코드가 잘못되었거나 아이디가 사용중입니다.",
+            'msg': error,
         })
 
 @bp.route('/login/', methods=['POST'])
@@ -81,4 +91,12 @@ def login():
         "code": -1,
         "msg": error,
     })
-# http -v POST http://43.201.142.6:5000/auth/singnup/ user_id="test" username="홍길동" password="test1234" email="test@naver.com" job="학생" school_code='qV8ugGBVT3'
+
+def check_email(email):
+    try:
+        v = validate_email(email)
+        email = v["email"]
+        return True
+    except EmailNotValidError as e:
+        return False
+# http -v POST http://localhost:5000/auth/singnup/ user_id="test2" username="홍동" password="test1234" email="test.com" job="학생" school_code='qV8ugGBVT3'
