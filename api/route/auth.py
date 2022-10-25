@@ -16,6 +16,10 @@ bp = Blueprint('auth', __name__, url_prefix='/auth') # URL과 함수의 매핑�
 
 @bp.route('/singnup/', methods=['POST'])
 def singnup():
+    try:
+        job = request.json['job']
+    except KeyError:
+        job = "교사"
     user = User.query.filter_by(user_id = request.json["user_id"]).first()
     school = School.query.filter_by(school_code = request.json["school_code"]).first()
     error = None
@@ -31,7 +35,7 @@ def singnup():
         username = request.json["username"]
         password = bcrypt.hashpw(request.json['password'].encode("utf-8"), bcrypt.gensalt())
         email = request.json["email"]
-        job = request.json["job"]
+        # job = request.json["job"]
         school_code = school.school_code
 
         user = User(user_id = user_id,
@@ -99,4 +103,4 @@ def check_email(email):
         return True
     except EmailNotValidError as e:
         return False
-# http -v POST http://localhost:5000/auth/singnup/ user_id="test2" username="홍동" password="test1234" email="test.com" job="학생" school_code='qV8ugGBVT3'
+# http -v POST http://127.0.0.1:5000/auth/singnup/ user_id="test3" username="티쳐" password="test1234" email="teacher@naver.com" school_code='qV8ugGBVT3'
