@@ -16,7 +16,7 @@ bp = Blueprint('auth', __name__, url_prefix='/auth') # URL과 함수의 매핑�
 
 @bp.route('/singnup/', methods=['POST'])
 def singnup():
-    try:
+    try: # flutter app 때문에.
         job = request.json['job']
     except KeyError:
         job = "교사"
@@ -104,3 +104,4 @@ def check_email(email):
     except EmailNotValidError as e:
         return False
 # http -v POST http://127.0.0.1:5000/auth/singnup/ user_id="test3" username="티쳐" password="test1234" email="teacher@naver.com" school_code='qV8ugGBVT3'
+# http -v POST http://43.201.142.6:5000/auth/singnup/ user_id="test3" username="티쳐" password="test1234" email="teacher@naver.com" school_code='qV8ugGBVT3'

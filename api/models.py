@@ -12,6 +12,7 @@ class SchoolClass(db.Model):
     school_code = db.Column(db.String(200), db.ForeignKey('school.school_code', ondelete='CASCADE'), nullable=False) # School모델의 id값
     class_code = db.Column(db.String(200), unique=True, nullable=False)
     school = db.relationship('School', backref=db.backref('class_set', cascade='all, delete-orphan')) # School모델 참조
+    port = db.Column(db.String(200), unique=True, nullable=True) # 멀티룸을 구현하기 위해!
 
 
 class User(db.Model):
