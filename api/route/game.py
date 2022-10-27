@@ -34,9 +34,11 @@ def before_connect():
     if not sc.port:
         return jsonify({
             "code" : -1,
-            "port" : ""
+            "msg" : "반코드가 존재하지 않습니다.",
+            "data" : ""
         })
     return jsonify({
         "code" : 1,
-        "port" : sc.port
+        "msg" : "포트 전송!",
+        "data" : sc.port
     })
