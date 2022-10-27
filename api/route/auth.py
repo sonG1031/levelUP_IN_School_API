@@ -103,5 +103,33 @@ def check_email(email):
         return True
     except EmailNotValidError as e:
         return False
+
+
+def check_token(token):
+    try:
+        payload = jwt.decode(token, JWT_SECRET_KEY, "HS256")
+    except jwt.InvalidTokenError:
+        payload = None
+    return payload
+
+
+def login_required(f):
+    @wraps(f)
+    def decorated_function(*args, **kwagrs):
+        token = request.headers.get('authorization')
+        if token is not None:
+            payload = check_token(token)
+            if payload is None:
+                return jsonify({
+                    "code" : -1,
+                    "msg" : "토큰 검증에 실패하셨습니다."
+                })
+        else:
+            return jsonify({
+                "code": -1,
+                "msg": "토큰 검증에 실패하셨습니다."
+            })
+        return f(*args, **kwagrs)
+    return decorated_function
 # http -v POST http://127.0.0.1:5000/auth/singnup/ user_id="test3" username="티쳐" password="test1234" email="teacher@naver.com" school_code='qV8ugGBVT3'
 # http -v POST http://43.201.142.6:5000/auth/singnup/ user_id="test3" username="티쳐" password="test1234" email="teacher@naver.com" school_code='qV8ugGBVT3'

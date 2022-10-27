@@ -1,12 +1,14 @@
 from flask import Blueprint, request, jsonify
 
 from api import db
+from api.route.auth import login_required
 from api.models import SchoolClass
 
 bp = Blueprint('game', __name__, url_prefix='/game')
 
 
 @bp.route('/port/', methods=['GET', 'POST'])
+@login_required
 def port():
     if request.method == 'GET':
         infos = SchoolClass.query.all()
@@ -29,6 +31,7 @@ def port():
 
 
 @bp.route('/before_connect/', methods=['POST'])
+@login_required
 def before_connect():
     sc = SchoolClass.query.filter_by(class_code=request.json['class_code']).first()
     if not sc.port:
