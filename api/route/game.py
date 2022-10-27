@@ -8,7 +8,6 @@ bp = Blueprint('game', __name__, url_prefix='/game')
 
 
 @bp.route('/port/', methods=['GET', 'POST'])
-@login_required
 def port():
     if request.method == 'GET':
         infos = SchoolClass.query.all()
