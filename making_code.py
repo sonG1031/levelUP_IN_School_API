@@ -19,7 +19,7 @@ def rand_code():
 # ['7TokPeTWfH', '7TokPeTWfHPxbZNLikCy']
 # ['J605kkDwTe', 'J605kkDwTee6sVDwV8GE']
 # ['sJVuOVg20a', 'sJVuOVg20aElZurkds1O']
-
+#
 # from api.models import School, SchoolClass
 # from api import db
 # s = School(school_code='qV8ugGBVT3', school_name='한양공업고등학교')
