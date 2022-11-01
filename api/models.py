@@ -11,6 +11,7 @@ class SchoolClass(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     school_code = db.Column(db.String(200), db.ForeignKey('school.school_code', ondelete='CASCADE'), nullable=False) # School모델의 id값
     class_code = db.Column(db.String(200), unique=True, nullable=False)
+    class_name = db.Column(db.String(200), nullable=False) # quest 통신때문에
     school = db.relationship('School', backref=db.backref('class_set', cascade='all, delete-orphan')) # School모델 참조
     port = db.Column(db.String(200), unique=True, nullable=True) # 멀티룸을 구현하기 위해!
 
@@ -38,7 +39,7 @@ class Game(db.Model):
     username = db.Column(db.String(200), nullable=False)
     user = db.relationship('User', backref=db.backref('game_set', cascade='all, delete-orphan'))
     level = db.Column(db.Integer, nullable=False)
-    exp = db.Column(db.Float, nullable=False)
+    exp = db.Column(db.Integer, nullable=False)
     point = db.Column(db.Integer, nullable=False)
 
 
@@ -46,9 +47,12 @@ class Quest(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String(200), nullable=False)
     description = db.Column(db.Text(), nullable=True)
-    exp = db.Column(db.Float, nullable=False)
+    exp = db.Column(db.Integer, nullable=False)
     point = db.Column(db.Integer, nullable=False)
-    period = db.Column(db.DateTime(), nullable=False)
-    class_code = db.Column(db.String(200), db.ForeignKey('school_class.class_code', ondelete='CASCADE'), nullable =False)
-    school_class = db.relationship('SchoolClass', backref=db.backref('quest_set', cascade='all, delete-orphan'))
-
+    start_date = db.Column(db.DateTime(), nullable=False)
+    end_date = db.Column(db.DateTime(), nullable=False)
+    user_id = db.Column(db.String(200), db.ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
+    teacher_id = db.Column(db.String(200), nullable=False) # 자기가 만든 퀘스트가 뭔지 알기 위해서
+    user = db.relationship('User', backref=db.backref('Quest_set', cascade='all, delete-orphan'))
+    done = db.Column(db.Boolean, server_default='False', nullable=True)
+    check = db.Column(db.Boolean, server_default='False', nullable=True)

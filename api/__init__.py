@@ -17,8 +17,9 @@ def create_app(): # <-- 애플리케이션 팩토리
     migrate.init_app(app, db)
     from . import models
 
-    from .route import auth, game
+    from .route import auth, game, quest
     app.register_blueprint(auth.bp)
     app.register_blueprint(game.bp)
+    app.register_blueprint(quest.bp)
 
     return app
