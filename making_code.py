@@ -20,7 +20,7 @@ def rand_code():
 # ['J605kkDwTe', 'J605kkDwTee6sVDwV8GE']
 # ['sJVuOVg20a', 'sJVuOVg20aElZurkds1O']
 #
-# from api.models import School, SchoolClass
+# from api.models import *
 # from api import db
 # s = School(school_code='qV8ugGBVT3', school_name='한양공업고등학교')
 # c = SchoolClass(school_code='qV8ugGBVT3', class_code='qV8ugGBVT3Ditm0VxXbu', class_name="2컴넷B")

@@ -23,27 +23,32 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             class_code = request.json['class_code']
             # teacher_id = request.json['teacher_id']
 
-            user_lst = User.query.filter_by(class_code = class_code)
-            quest_lst = []
-            for user in user_lst:
-                quest_lst.append(Quest(
-                    title = title,
-                    description = description,
-                    exp = exp,
-                    start_date = start_date,
-                    end_date = end_date,
-                    point = point,
-                    user_id = user.user_id,
-                    teacher_id = teacher_id
-                ))
-            for data in quest_lst:
-                db.session.add(data)
-            db.session.commit()
+            msg = ""
+
+            user_lst = User.query.filter((User.class_code == class_code) | (User.job == '학생'))
+            if not user_lst:
+                msg = "반코드가 존재하지 않거나 학생이 없습니다.."
+            else:
+                quest_lst = []
+                for user in user_lst:
+                    quest_lst.append(Quest(
+                        title = title,
+                        description = description,
+                        exp = exp,
+                        start_date = start_date,
+                        end_date = end_date,
+                        point = point,
+                        user_id = user.user_id,
+                        teacher_id = teacher_id
+                    ))
+                for data in quest_lst:
+                    db.session.add(data)
+                db.session.commit()
             db.session.remove()
 
             return jsonify({
                 "code": 1,
-                "msg": "퀘스트 추가 완료!",
+                "msg": msg,
             })
         elif request.method == 'GET':
             quest_lst = Quest.query.filter_by(teacher_id=teacher_id)
