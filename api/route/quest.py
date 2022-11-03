@@ -1,4 +1,6 @@
 from flask import Blueprint, request,jsonify
+from sqlalchemy import and_
+
 from api import db
 
 from api.models import Quest, User, Game
@@ -23,7 +25,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             class_code = request.json['class_code']
             # teacher_id = request.json['teacher_id']
 
-            user_lst = User.query.filter((User.class_code == class_code) & (User.job == '학생'))
+            user_lst = User.query.filter(and_(User.class_code == class_code, User.job == '�л�'))
             print(user_lst)
             if not user_lst:
                 return jsonify({
