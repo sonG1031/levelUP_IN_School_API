@@ -29,7 +29,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             user_lst = User.query.filter_by(class_code=class_code)
             # user_lst = list(User.query.filter_by(class_code=class_code).filter_by(job="�л�"))
             print(list(user_lst))
-            if not user_lst:
+            if not list(user_lst):
                 return jsonify({
                     "code": -1,
                     "msg": "반코드가 존재하지 않거나 학생이 없습니다..",
