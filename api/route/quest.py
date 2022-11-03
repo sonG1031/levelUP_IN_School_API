@@ -32,7 +32,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             else:
                 quest_lst = []
                 for user in user_lst:
-                    quest_lst.append(Quest(
+                    data = Quest(
                         title = title,
                         description = description,
                         exp = exp,
@@ -41,7 +41,8 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
                         point = point,
                         user_id = user.user_id,
                         teacher_id = teacher_id
-                    ))
+                    )
+                    quest_lst.append(data)
                 for data in quest_lst:
                     db.session.add(data)
                 db.session.commit()
