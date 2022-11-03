@@ -19,8 +19,8 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             title = request.json['title']
             description = request.json['description']
             exp = request.json['exp']
-            start_date = request.json['start_date']
-            end_date = request.json['end_date']
+            start_date = datetime.datetime.strptime(request.json['start_date'],'%Y-%m-%d')
+            end_date = datetime.datetime.strptime(request.json['end_date'],'%Y-%m-%d')
             point = request.json['point']
             class_code = request.json['class_code']
             # teacher_id = request.json['teacher_id']
