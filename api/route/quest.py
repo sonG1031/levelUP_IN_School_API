@@ -26,7 +26,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             # teacher_id = request.json['teacher_id']
 
             user_lst = User.query.filter(and_(User.class_code == class_code, User.job == '�л�'))
-            print(user_lst)
+            print(list(user_lst))
             if not user_lst:
                 return jsonify({
                     "code": -1,
@@ -46,6 +46,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
                         teacher_id = teacher_id
                     )
                     quest_lst.append(data)
+                print(quest_lst)
                 for data in quest_lst:
                     db.session.add(data)
                 db.session.commit()
