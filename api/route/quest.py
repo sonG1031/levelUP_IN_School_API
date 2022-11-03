@@ -25,10 +25,8 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             class_code = request.json['class_code']
             # teacher_id = request.json['teacher_id']
             print(class_code)
-            # user_lst = list(User.query.filter(and_(User.class_code == class_code, User.job == '�л�')))
-            # user_lst = User.query.filter_by(class_code=class_code)
+            user_lst = list(User.query.filter(and_(User.class_code == class_code, User.job != '교사')))
             # user_lst = list(User.query.filter_by(class_code=class_code).filter_by(job="�л�"))
-            user_lst = User.query.all()
             print(list(user_lst))
             if not list(user_lst):
                 return jsonify({
