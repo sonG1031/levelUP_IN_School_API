@@ -22,7 +22,7 @@ class User(db.Model):
     username = db.Column(db.String(200), nullable=False)
     password = db.Column(db.String(200), nullable=False)
     email = db.Column(db.String(200), unique=True, nullable =False)
-    job = db.Column(db.String(200), nullable=False) # 학생이냐 선생님이냐
+    isStudent = db.Column(db.Boolean, nullable=False) # 학생이냐 선생님이냐
     school_code = db.Column(db.String(200), db.ForeignKey('school.school_code', ondelete='CASCADE'), nullable=False)
     school = db.relationship('School', backref=db.backref('user_set', cascade='all, delete-orphan'))
     class_code = db.Column(db.String(200), db.ForeignKey('school_class.class_code', ondelete='CASCADE'),  nullable=True)

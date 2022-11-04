@@ -16,10 +16,6 @@ bp = Blueprint('auth', __name__, url_prefix='/auth') # URL과 함수의 매핑�
 
 @bp.route('/singnup/', methods=['POST'])
 def singnup():
-    try: # flutter app 때문에.
-        job = request.json['job']
-    except KeyError:
-        job = "교사"
     user = User.query.filter_by(user_id = request.json["user_id"]).first()
     school = School.query.filter_by(school_code = request.json["school_code"]).first()
     error = None
@@ -37,12 +33,15 @@ def singnup():
         email = request.json["email"]
         # job = request.json["job"]
         school_code = school.school_code
-
+        try:
+            isStudent = request.json["isStudent"]
+        except KeyError:
+            isStudent = False
         user = User(user_id = user_id,
                     username = username,
                     password = password.decode('utf-8'),
                     email = email,
-                    job = job,
+                    isStudent = isStudent,
                     school_code = school_code)
         db.session.add(user)
         db.session.commit()

@@ -14,7 +14,7 @@ bp = Blueprint('quest', __name__, url_prefix='/quest')
 @login_required
 def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스트 추가하기(POST)
     user = User.query.filter_by(user_id = teacher_id).first()
-    if user.job == "교사":
+    if user.isStudent is False:
         if request.method == 'POST':
             title = request.json['title']
             description = request.json['description']
@@ -25,7 +25,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             class_code = request.json['class_code']
             # teacher_id = request.json['teacher_id']
             print(class_code)
-            user_lst = list(User.query.filter(and_(User.class_code == class_code, User.job != '교사')))
+            user_lst = list(User.query.filter(and_(User.class_code == class_code, User.isStudent is True)))
             # user_lst = list(User.query.filter_by(class_code=class_code).filter_by(job="�л�"))
             print(list(user_lst))
             if not list(user_lst):
@@ -74,8 +74,8 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
 @login_required
 def app_check(teacher_id):
     user = User.query.filter_by(user_id=teacher_id).first()
-    if user.job == "교사":
-        q = Quest.query.filter((Quest.user_id == request.json['user_id']) | (Quest.id == request.json['quest_id'])).first()
+    if user.isStudent is False:
+        q = Quest.query.filter(and_(Quest.user_id == request.json['user_id'], Quest.id == request.json['quest_id'])).first()
         q.check = True
         db.session.commit()
         db.session.remove()
@@ -90,7 +90,7 @@ def app_check(teacher_id):
 def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스트 완료요청 보내기(POST)
     if request.method == "GET":
         now = datetime.datetime.now()
-        user_quest = Quest.query.filter((Quest.user_id == user_id) | (Quest.start_date <= now <= Quest.end_date))
+        user_quest = Quest.query.filter(and_(Quest.user_id == user_id, Quest.start_date <= now <= Quest.end_date))
         user_quest = get_infoList(user_quest)
         db.session.remove()
         return jsonify({
@@ -99,7 +99,7 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
             "data": user_quest
         })
     elif request.method == "POST":
-        user_quest = Quest.query.filter((Quest.user_id == user_id) | (Quest.id == request.json['quest_id'])).first()
+        user_quest = Quest.query.filter(and_(Quest.user_id == user_id, Quest.id == request.json['quest_id'])).first()
         now = datetime.datetime.now()
 
         if user_quest.create_date > now:
@@ -128,9 +128,19 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
 def game_reward():
     game_info = Game.query.filter_by(user_id=request.json['user_id']).first()
     reward_info = Quest.query.filter((Quest.user_id == request.json['user_id']) | (Quest.id == request.json['quest_id'])).first()
-    game_info.point += reward_info.point
-    game_info.exp += reward_info.exp
-
+    if reward_info is None:
+        return jsonify({
+            "code": -1,
+            "msg": "요청 오류",
+        })
+    elif reward_info.check is True:
+        game_info.point += reward_info.point
+        game_info.exp += reward_info.exp
+    else:
+        return jsonify({
+            "code" : -1,
+            "msg" : "요청 오류",
+        })
     db.session.delete(reward_info) # 퀘스트를 완료했으니 퀘스트 삭제
     db.session.commit()
     db.session.remove()
