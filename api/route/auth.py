@@ -42,7 +42,8 @@ def singnup():
                     password = password.decode('utf-8'),
                     email = email,
                     isStudent = isStudent,
-                    school_code = school_code)
+                    school_code = school_code,
+                    class_code= request.json['class_code'])
         db.session.add(user)
         db.session.commit()
         db.session.remove()
@@ -80,8 +81,10 @@ def login():
             "data": {
                 "id": user.id,
                 "username": user.username,
-                "password": user.password,
-                "user_id": user.user_id
+                "user_id": user.user_id,
+                "isStudent": user.isStudent,
+                "class_code": user.class_code,
+                "school_code": user.school_code
             }
         }, ensure_ascii=False)
 

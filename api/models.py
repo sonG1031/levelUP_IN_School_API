@@ -25,7 +25,7 @@ class User(db.Model):
     isStudent = db.Column(db.Boolean, nullable=False) # 학생이냐 선생님이냐
     school_code = db.Column(db.String(200), db.ForeignKey('school.school_code', ondelete='CASCADE'), nullable=False)
     school = db.relationship('School', backref=db.backref('user_set', cascade='all, delete-orphan'))
-    class_code = db.Column(db.String(200), db.ForeignKey('school_class.class_code', ondelete='CASCADE'),  nullable=True)
+    class_code = db.Column(db.String(200), db.ForeignKey('school_class.class_code', ondelete='CASCADE'),  nullable=False)
     school_class = db.relationship('SchoolClass', backref=db.backref('user_set', cascade='all, delete-orphan'))
     qr = db.Column(db.String(200), nullable=True, unique=True)
 
