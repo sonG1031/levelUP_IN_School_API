@@ -11,10 +11,10 @@ bp = Blueprint('quest', __name__, url_prefix='/quest')
 
 
 @bp.route("/app/<string:teacher_id>", methods=["GET", "POST"])
-@login_required
+# @login_required
 def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스트 추가하기(POST)
     user = User.query.filter_by(user_id = teacher_id).first()
-    if user.isStudent is False:
+    if user.isStudent == False:
         if request.method == 'POST':
             title = request.json['title']
             description = request.json['description']
@@ -24,26 +24,26 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             point = request.json['point']
             class_code = request.json['class_code']
 
-            q = QuestList(
-                title=title,
-                description=description,
-                exp=exp,
-                start_date=start_date,
-                end_date=end_date,
-                point=point,
-                teacher_id=teacher_id
-            )
-            db.session.add(q)
-            db.session.commit()
-
-            user_lst = list(User.query.filter(and_(User.class_code == class_code, User.isStudent is True)))
+            user_lst = list(User.query.filter(and_(User.class_code == class_code, User.isStudent == True)))
             print(list(user_lst))
-            if not list(user_lst):
+            if not user_lst:
                 return jsonify({
                     "code": -1,
                     "msg": "반코드가 존재하지 않거나 학생이 없습니다..",
                 })
             else:
+                q = QuestList(
+                    title=title,
+                    description=description,
+                    exp=exp,
+                    start_date=start_date,
+                    end_date=end_date,
+                    point=point,
+                    teacher_id=teacher_id
+                )
+                db.session.add(q)
+                db.session.commit()
+
                 for user in user_lst:
                     data = UserQuest(
                         title = title,
@@ -92,7 +92,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
 @login_required
 def app_check(teacher_id):
     user = User.query.filter_by(user_id=teacher_id).first()
-    if user.isStudent is False:
+    if user.isStudent == False:
         q = UserQuest.query.filter(and_(UserQuest.user_id == request.json['user_id'], UserQuest.id == request.json['id'])).first()
         q.check = True
         db.session.commit()
@@ -151,7 +151,7 @@ def game_reward():
             "code": -1,
             "msg": "요청 오류",
         })
-    elif reward_info.check is True:
+    elif reward_info.check == True:
         game_info.point += reward_info.point
         game_info.exp += reward_info.exp
     else:

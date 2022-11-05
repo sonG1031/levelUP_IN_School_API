@@ -5,9 +5,7 @@ from api.models import User, SchoolClass
 
 import bcrypt, jwt
 from config import JWT_SECRET_KEY
-# from config import JWT_SECRET_KEY, IS_CAM_KEY
 from functools import wraps
-from datetime import datetime
 
 from email_validator import validate_email, EmailNotValidError
 
@@ -44,7 +42,7 @@ def singnup():
                     email = email,
                     isStudent = isStudent,
                     school_code = school_code,
-                    class_code= request.json['class_code'])
+                    class_code= class_code)
         db.session.add(user)
         db.session.commit()
         db.session.remove()
