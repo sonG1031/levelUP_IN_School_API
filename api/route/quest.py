@@ -101,7 +101,11 @@ def app_check(teacher_id):
             "code": 1,
             "msg": "퀘스트 완료 요청을 수락하였습니다.",
         })
-
+    else:
+        return jsonify({
+            "code": -1,
+            "msg": "요청 오류",
+        })
 
 @bp.route("/game/<string:user_id>", methods=["GET", "POST"])
 @login_required
