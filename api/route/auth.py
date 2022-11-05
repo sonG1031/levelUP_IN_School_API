@@ -1,7 +1,7 @@
 from flask import request, jsonify, Response, json, Blueprint
 
 from api import db
-from api.models import User, School
+from api.models import User, SchoolClass
 
 import bcrypt, jwt
 from config import JWT_SECRET_KEY
@@ -17,12 +17,12 @@ bp = Blueprint('auth', __name__, url_prefix='/auth') # URL과 함수의 매핑�
 @bp.route('/singnup/', methods=['POST'])
 def singnup():
     user = User.query.filter_by(user_id = request.json["user_id"]).first()
-    school = School.query.filter_by(school_code = request.json["school_code"]).first()
+    check_code = SchoolClass.query.filter_by(school_code = request.json["school_code"]).filter_by(class_code = request.json["class_code"]).first()
     error = None
     if user:
         error = "아이디가 사용중입니다."
-    elif not school:
-        error = "존재하지 않는 학교코드입니다."
+    elif not check_code:
+        error = "코드가 잘못되었습니다."
     elif not check_email(request.json["email"]):
         error = "이메일이 잘못되었습니다."
 
@@ -32,7 +32,8 @@ def singnup():
         password = bcrypt.hashpw(request.json['password'].encode("utf-8"), bcrypt.gensalt())
         email = request.json["email"]
         # job = request.json["job"]
-        school_code = school.school_code
+        school_code = check_code.school_code
+        class_code = check_code.class_code
         try:
             isStudent = request.json["isStudent"]
         except KeyError:
