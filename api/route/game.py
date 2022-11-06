@@ -19,10 +19,18 @@ def port():
         })
     elif request.method == 'POST':
         data = request.get_json()
-        for key, val in data.items():
-            sc = SchoolClass.query.filter_by(class_code=key).first()
-            sc.port = str(val)
-        db.session.commit()
+        if data['type'] == "move":
+            del data['type']
+            for key, val in data.items():
+                sc = SchoolClass.query.filter_by(class_code=key).first()
+                sc.move_port = str(val)
+            db.session.commit()
+        elif data['type'] == "chat":
+            del data['type']
+            for key, val in data.items():
+                sc = SchoolClass.query.filter_by(class_code=key).first()
+                sc.chat_port = str(val)
+            db.session.commit()
     db.session.remove()
     return jsonify({
         "code" : 1,
@@ -42,5 +50,5 @@ def before_connect():
     return jsonify({
         "code" : 1,
         "msg" : "포트 전송!",
-        "data" : sc.port
+        "data" : [sc.move_port, sc.chat_port]
     })

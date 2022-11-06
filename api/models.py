@@ -13,7 +13,9 @@ class SchoolClass(db.Model):
     class_code = db.Column(db.String(200), unique=True, nullable=False)
     class_name = db.Column(db.String(200), nullable=False) # quest 통신때문에
     school = db.relationship('School', backref=db.backref('class_set', cascade='all, delete-orphan')) # School모델 참조
-    port = db.Column(db.String(200), unique=True, nullable=True) # 멀티룸을 구현하기 위해!
+    move_port = db.Column(db.String(200), nullable=True) # 멀티룸을 구현하기 위해!, 게임 위치 동기화 목적
+    chat_port = db.Column(db.String(200), nullable=True) # 멀티룸을 구현하기 위해! 채팅 목적
+
 
 
 class User(db.Model):
