@@ -11,7 +11,7 @@ bp = Blueprint('quest', __name__, url_prefix='/quest')
 
 
 @bp.route("/app/<string:teacher_id>", methods=["GET", "POST"])
-# @login_required
+@login_required
 def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스트 추가하기(POST)
     user = User.query.filter_by(user_id = teacher_id).first()
     if user.isStudent == False:

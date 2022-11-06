@@ -41,7 +41,7 @@ def port():
 @login_required
 def before_connect():
     sc = SchoolClass.query.filter_by(class_code=request.json['class_code']).first()
-    if not sc.port:
+    if not sc.chat_port or not sc.move_port :
         return jsonify({
             "code" : -1,
             "msg" : "반코드가 존재하지 않습니다.",
