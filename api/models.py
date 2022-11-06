@@ -67,4 +67,14 @@ class QuestList(db.Model):
     point = db.Column(db.Integer, nullable=False)
     start_date = db.Column(db.DateTime(), nullable=False)
     end_date = db.Column(db.DateTime(), nullable=False)
+    class_code = db.Column(db.String(200), nullable=False)
     teacher_id = db.Column(db.String(200), nullable=False) # 자기가 만든 퀘스트가 뭔지 알기 위해서
+
+
+class Notice(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    content = db.Column(db.Text(), nullable=True)
+    class_code = db.Column(db.String(200), nullable=False)
+    current_date = db.Column(db.DateTime(), nullable=False)
+    teacher_id = db.Column(db.String(200), nullable=False)

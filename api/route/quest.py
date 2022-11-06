@@ -39,7 +39,8 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
                     start_date=start_date,
                     end_date=end_date,
                     point=point,
-                    teacher_id=teacher_id
+                    teacher_id=teacher_id,
+                    class_code=class_code
                 )
                 db.session.add(q)
                 db.session.commit()
@@ -173,6 +174,7 @@ def game_reward():
     })
 #================================================================================
 
+
 @bp.before_request # 이 애너테이션이 적용된 함수는 라우팅 함수보다 항상 먼저 실행
 def check_quest_date():
     now = datetime.datetime.now()
@@ -205,6 +207,7 @@ def serializable_userQuest(info_list):
         )
     return lst
 
+
 def serializable_questList(info_list):
     lst = []
     for info in info_list:
@@ -218,6 +221,7 @@ def serializable_questList(info_list):
                 "exp":info.exp,
                 "point":info.point,
                 "teacher_id": info.teacher_id,
+                "class_code": info.class_code
             }
         )
     return lst
