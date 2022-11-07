@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from api import db
 from api.route.auth import login_required
-from api.models import SchoolClass
+from api.models import SchoolClass, Game
 
 bp = Blueprint('game', __name__, url_prefix='/game')
 
@@ -51,4 +51,20 @@ def before_connect():
         "code" : 1,
         "msg" : "포트 전송!",
         "data" : [sc.move_port, sc.chat_port]
+    })
+
+
+@bp.route('/level_up/', methods=['POST'])
+def level_up():
+    g = Game.filter_by(user_id=request.json['user_id']).first()
+    g.level = request.json['level']
+    g.exp = request.json['exp']
+    g.max_exp = request.json['max_exp']
+    g.point = request.json['point']
+    db.session.commit()
+    db.session.remove()
+
+    return jsonify({
+        "code": 1,
+        "msg": "레벨업 처리 완료!",
     })
