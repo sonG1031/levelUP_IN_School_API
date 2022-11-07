@@ -56,7 +56,7 @@ def before_connect():
 
 @bp.route('/level_up/', methods=['POST'])
 def level_up():
-    g = Game.filter_by(user_id=request.json['user_id']).first()
+    g = Game.query.filter_by(user_id=request.json['user_id']).first()
     g.level = request.json['level']
     g.exp = request.json['exp']
     g.max_exp = request.json['max_exp']
