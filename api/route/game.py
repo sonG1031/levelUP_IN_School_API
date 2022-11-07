@@ -66,5 +66,5 @@ def level_up():
 
     return jsonify({
         "code": 1,
-        "msg": "레벨업 처리 완료!",
+        "msg": "레벨업!",
     })
