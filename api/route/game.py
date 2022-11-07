@@ -89,7 +89,7 @@ def buy(user_id):
         items = Inventory.query.filter_by(user_id=user_id)
         data = ""
         for item in items:
-            data = data + f", {item.item_name}" # item1, item2, item3
+            data = data + f"{item.item_name}," # item1, item2, item3
         return jsonify({
             "code": 1,
             "msg": "인벤토리 반환!",
