@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from api import db
 from api.route.auth import login_required
-from api.models import SchoolClass, Game
+from api.models import SchoolClass, Game, Inventory
 
 bp = Blueprint('game', __name__, url_prefix='/game')
 
@@ -68,3 +68,20 @@ def level_up():
         "code": 1,
         "msg": "레벨업!",
     })
+
+@bp.route('/buy/', methods=['POST','GET'])
+def buy():
+    if request.method == "POST":
+        g = Game.query.filter_by(user_id=request.json['user_id']).first()
+        g.point = request.json['point']
+        inventory = Inventory(
+            item_name=request.json['item_name'],
+            user_id=request.json['user_id']
+        )
+        db.session.add(inventory)
+        db.session.commit()
+        db.session.remove()
+        return jsonify({
+            "code": 1,
+            "msg": "구매완료!",
+        })
