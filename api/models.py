@@ -37,9 +37,10 @@ class Game(db.Model):
     user_id = db.Column(db.String(200), db.ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
     username = db.Column(db.String(200), nullable=False)
     user = db.relationship('User', backref=db.backref('game_set', cascade='all, delete-orphan'))
-    level = db.Column(db.Integer, nullable=False)
-    exp = db.Column(db.Integer, nullable=False)
-    point = db.Column(db.Integer, nullable=False)
+    level = db.Column(db.Integer, server_default='0', nullable=True)
+    exp = db.Column(db.Integer, server_default='0', nullable=True)
+    max_exp = db.Column(db.Integer, server_default='100', nullable=True)
+    point = db.Column(db.Integer, server_default='0', nullable=True)
 
 
 class UserQuest(db.Model):
@@ -78,3 +79,16 @@ class Notice(db.Model):
     class_code = db.Column(db.String(200), nullable=False)
     current_date = db.Column(db.DateTime(), nullable=False)
     teacher_id = db.Column(db.String(200), nullable=False)
+
+
+class Store(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String(200), nullable=False)
+    price = db.Column(db.Integer, nullable=False)
+
+
+class Inventory(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    item_name = db.Column(db.String(200), nullable=False)
+    user_id = db.Column(db.String(200), db.ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
+    user = db.relationship('User', backref=db.backref('inventory_set', cascade='all, delete-orphan'))

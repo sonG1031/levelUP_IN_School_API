@@ -1,7 +1,7 @@
 from flask import request, jsonify, Response, json, Blueprint
 
 from api import db
-from api.models import User, SchoolClass
+from api.models import User, SchoolClass, Game
 
 import bcrypt, jwt
 from config import JWT_SECRET_KEY
@@ -43,7 +43,12 @@ def singnup():
                     isStudent = isStudent,
                     school_code = school_code,
                     class_code= class_code)
+        game = Game(
+            user_id=user_id,
+            username=username
+        )
         db.session.add(user)
+        db.session.add(game)
         db.session.commit()
         db.session.remove()
 
@@ -74,6 +79,7 @@ def login():
             "password" : user.password
         }
         token = jwt.encode(payload, JWT_SECRET_KEY, algorithm="HS256")
+        game = Game.query.filter_by(user_id=user.user_id).first()
         body = json.dumps({
             "code": 1,
             "msg": "로그인에 성공하셨습니다.",
@@ -83,7 +89,11 @@ def login():
                 "user_id": user.user_id,
                 "isStudent": user.isStudent,
                 "class_code": user.class_code,
-                "school_code": user.school_code
+                "school_code": user.school_code,
+                "level": game.level,
+                "exp": game.exp,
+                "max_exp": game.max_exp,
+                "point": game.point
             }
         }, ensure_ascii=False)
 
