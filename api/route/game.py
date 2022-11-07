@@ -72,7 +72,7 @@ def level_up():
 @bp.route('/buy/<string:user_id>', methods=['POST','GET'])
 def buy(user_id):
     if request.method == "POST":
-        g = Game.query.filter_by(user_id=request.json['user_id']).first()
+        g = Game.query.filter_by(user_id=user_id).first()
         g.point = request.json['point']
         inventory = Inventory(
             item_name=request.json['item_name'],
