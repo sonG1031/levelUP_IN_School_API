@@ -77,9 +77,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
             return jsonify({
                 "code": 1,
                 "msg": "퀘스트 목록 반환!",
-                "data": {
-                    "questList": quest_lst,
-                }
+                "data": quest_lst
             })
         elif request.method == 'PUT':
             quest = QuestList.query.get(request.json['id'])
@@ -123,9 +121,7 @@ def uq(teacher_id):
     return jsonify({
         "code": 1,
         "msg": "학급확인 목록 반환!",
-        "data": {
-            "userQuest": user_quest,
-        }
+        "data": user_quest,
     })
 
 
