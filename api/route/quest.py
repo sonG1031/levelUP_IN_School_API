@@ -106,11 +106,23 @@ def quest_handle(teacher_id, id):
         q.start_date = datetime.datetime.strptime(request.json['start_date'], '%Y-%m-%d')
         q.end_date = datetime.datetime.strptime(request.json['end_date'], '%Y-%m-%d')
         q.point = request.json['point']
+        q.class_code = request.json['class_code']
+
         db.session.commit()
         db.session.remove()
         return jsonify({
             "code": 1,
-            "msg": "퀘스트 수정 완료!"
+            "msg": "퀘스트 수정 완료!",
+            "data" : {
+                "id" : id,
+                "title" : q.title,
+                "description" : q.description,
+                "exp" : q.exp,
+                "point" : q.point,
+                "start_date" : q.start_date,
+                "end_date" : q.end_date,
+                "class_code" : q.class_code
+            }
         })
     elif request.method == "DELETE":
         db.session.delete(q)
