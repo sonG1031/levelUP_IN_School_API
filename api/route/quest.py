@@ -79,32 +79,6 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
                 "msg": "퀘스트 목록 반환!",
                 "data": quest_lst
             })
-        elif request.method == 'PUT':
-            quest = QuestList.query.get(request.json['id'])
-
-            quest.title = request.json['title']
-            quest.description = request.json['description']
-            quest.exp = request.json['exp']
-            quest.start_date = datetime.datetime.strptime(request.json['start_date'], '%Y-%m-%d')
-            quest.end_date = datetime.datetime.strptime(request.json['end_date'], '%Y-%m-%d')
-            quest.point = request.json['point']
-            db.session.commit()
-            db.session.remove()
-
-            return jsonify({
-                "code": 1,
-                "msg": "퀘스트 수정 완료!"
-            })
-        elif request.method == 'DELETE':
-            quest = QuestList.query.get(request.json['id'])
-            db.session.delete(quest)
-            db.session.commit()
-            db.session.remove()
-
-            return jsonify({
-                "code": 1,
-                "msg": "퀘스트 삭제 완료!"
-            })
     else:
         return jsonify({
             "code": -1,
@@ -112,7 +86,44 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
         })
 
 
+@bp.route("/app/<string:teacher_id>/<int:id>", methods=["GET", "PUT", "DELETE"])
+@login_required
+def quest_handle(teacher_id, id):
+    q = QuestList.query.get(id)
+
+    if request.method == 'GET':
+        q = serializable_quest(q)
+        db.session.remove()
+        return jsonify({
+            "code" : 1,
+            "msg" : "퀘스트 상세 보기",
+            "data" : q
+        })
+    elif request.method == "PUT":
+        q.title = request.json['title']
+        q.description = request.json['description']
+        q.exp = request.json['exp']
+        q.start_date = datetime.datetime.strptime(request.json['start_date'], '%Y-%m-%d')
+        q.end_date = datetime.datetime.strptime(request.json['end_date'], '%Y-%m-%d')
+        q.point = request.json['point']
+        db.session.commit()
+        db.session.remove()
+        return jsonify({
+            "code": 1,
+            "msg": "퀘스트 수정 완료!"
+        })
+    elif request.method == "DELETE":
+        db.session.delete(q)
+        db.session.commit()
+        db.session.remove()
+
+        return jsonify({
+            "code": 1,
+            "msg": "퀘스트 삭제 완료!"
+        })
+
 @bp.route("/app/uq/<string:teacher_id>", methods=["GET"])
+@login_required
 def uq(teacher_id):
     user_quest = UserQuest.query.filter_by(teacher_id=teacher_id)
     user_quest = serializable_userQuest(user_quest)
@@ -261,3 +272,16 @@ def serializable_questList(info_list):
             }
         )
     return lst
+
+def serializable_quest(info):
+    return {
+                "id": info.id,
+                "title": info.title,
+                "description": info.description,
+                "start_date": info.start_date.strftime('%Y-%m-%d'),
+                "end_date": info.end_date.strftime('%Y-%m-%d'),
+                "exp":info.exp,
+                "point":info.point,
+                "teacher_id": info.teacher_id,
+                "class_code": info.class_code
+            }
