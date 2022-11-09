@@ -8,6 +8,7 @@ import datetime
 
 bp = Blueprint('notice', __name__, url_prefix='/notice')
 
+
 @bp.route("/app/<string:teacher_id>", methods=['GET','POST',"PUT", "DELETE"])
 @login_required
 def app_notice(teacher_id):
@@ -30,28 +31,55 @@ def app_notice(teacher_id):
             })
         elif request.method == "GET":
             notice = Notice.query.filter_by(teacher_id=teacher_id)
-            notice = serializable_Notice(notice)
+            notice = serializable_NoticeLst(notice)
             db.session.remove()
             return jsonify({
                 "code": 1,
                 "msg": "공지사항 목록 반환!",
                 "data": notice
             })
+    else:
+        return jsonify({
+            "code": -1,
+            "msg": "학생은 사용할 수 없는 서비스입니다.",
+        })
+
+
+@bp.route("/app/<string:teacher_id>/<int:id>", methods=['GET', "PUT", "DELETE"])
+@login_required
+def app_notice_handle(teacher_id, id):
+    user = User.query.filter_by(user_id=teacher_id).first()
+    notice = Notice.query.get(id)
+    if user.isStudent == False:
+        if request.method == "GET":
+            notice = serializable_Notice(notice)
+            db.session.remove()
+            return jsonify({
+                "code": 1,
+                "msg": "공지사항 반환!",
+                "data": notice
+            })
         elif request.method == "PUT":
-            notice = Notice.query.get(request.json['id'])
             notice.title = request.json['title']
             notice.content = request.json['content']
             notice.current_date = datetime.datetime.strptime(request.json['current_date'], '%Y-%m-%d')
             notice.class_code = request.json['class_code']
             db.session.commit()
+            data = {
+                "id": id,
+                "title": notice.title,
+                "content": notice.content,
+                "current_date": notice.current_date.strftime('%Y-%m-%d'),
+                "teacher_id": notice.teacher_id,
+                "class_code": notice.class_code
+            }
             db.session.remove()
-
             return jsonify({
                 "code": 1,
-                "msg": "공지사항 수정 완료!"
+                "msg": "공지사항 수정 완료!",
+                "data": data
             })
         elif request.method == "DELETE":
-            notice = Notice.query.get(request.json['id'])
             db.session.delete(notice)
             db.session.commit()
             db.session.remove()
@@ -71,7 +99,7 @@ def app_notice(teacher_id):
 def game_notice(user_id):
     user = User.query.filter_by(user_id=user_id).first()
     notice = Notice.query.filter_by(class_code=user.class_code)
-    notice = serializable_Notice(notice)
+    notice = serializable_NoticeLst(notice)
     return jsonify({
         "code": 1,
         "msg": "공지사항 목록 반환!",
@@ -79,7 +107,7 @@ def game_notice(user_id):
     })
 
 
-def serializable_Notice(info_list):
+def serializable_NoticeLst(info_list):
     lst = []
     for info in info_list:
         lst.append(
@@ -93,3 +121,14 @@ def serializable_Notice(info_list):
             }
         )
     return lst
+
+
+def serializable_Notice(info):
+    return {
+                "id": info.id,
+                "title": info.title,
+                "content": info.content,
+                "current_date": info.current_date.strftime('%Y-%m-%d'),
+                "teacher_id": info.teacher_id,
+                "class_code": info.class_code
+            }

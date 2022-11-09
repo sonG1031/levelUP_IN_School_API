@@ -273,7 +273,7 @@ def serializable_userQuest(info_list):
                 "point":info.point,
                 "done": info.done,
                 "check": info.check,
-                "questlst_id":info.questlst_id
+                # "questlst_id":info.questlst_id
             }
         )
     return lst
