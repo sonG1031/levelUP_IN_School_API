@@ -8,7 +8,7 @@ import datetime
 
 bp = Blueprint('notice', __name__, url_prefix='/notice')
 
-@bp.route("/app/<string:teacher_id>", methods=['GET','POST'])
+@bp.route("/app/<string:teacher_id>", methods=['GET','POST',"PUT", "DELETE"])
 @login_required
 def app_notice(teacher_id):
     user = User.query.filter_by(user_id=teacher_id).first()
@@ -37,7 +37,28 @@ def app_notice(teacher_id):
                 "msg": "공지사항 목록 반환!",
                 "data": notice
             })
+        elif request.method == "PUT":
+            notice = Notice.query.get(request.json['id'])
+            notice.title = request.json['title']
+            notice.content = request.json['content']
+            notice.current_date = datetime.datetime.strptime(request.json['current_date'], '%Y-%m-%d')
+            notice.class_code = request.json['class_code']
+            db.session.commit()
+            db.session.remove()
 
+            return jsonify({
+                "code": 1,
+                "msg": "공지사항 수정 완료!"
+            })
+        elif request.method == "DELETE":
+            notice = Notice.query.get(request.json['id'])
+            db.session.delete(notice)
+            db.session.commit()
+            db.session.remove()
+            return jsonify({
+                "code": 1,
+                "msg": "공지사항 삭제 완료!"
+            })
     else:
         return jsonify({
             "code": -1,
