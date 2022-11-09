@@ -10,7 +10,7 @@ import datetime
 bp = Blueprint('quest', __name__, url_prefix='/quest')
 
 
-@bp.route("/app/<string:teacher_id>", methods=["GET", "POST", "PUT", "DELETE"])
+@bp.route("/app/<string:teacher_id>", methods=["GET", "POST"])
 @login_required
 def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스트 추가하기(POST)
     user = User.query.filter_by(user_id = teacher_id).first()
@@ -59,11 +59,22 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
                     )
                     db.session.add(data)
                 db.session.commit()
+            data = {
+                "id": q.id,
+                "title": q.title,
+                "description": q.description,
+                "start_date": q.start_date.strftime('%Y-%m-%d'),
+                "end_date": q.end_date.strftime('%Y-%m-%d'),
+                "exp": q.exp,
+                "point": q.point,
+                "teacher_id": q.teacher_id,
+                "class_code": q.class_code
+            }
             db.session.remove()
-
             return jsonify({
                 "code": 1,
                 "msg": "퀘스트 추가 성공!",
+                "data": data
             })
         elif request.method == 'GET':
 
@@ -91,7 +102,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
 def quest_handle(teacher_id, id):
     q = QuestList.query.get(id)
 
-    if request.method == 'GET':
+    if request.method == 'GET': # 상세보기
         q = serializable_quest(q)
         db.session.remove()
         return jsonify({
