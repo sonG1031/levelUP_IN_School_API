@@ -151,11 +151,11 @@ def quest_detail(teacher_id, id):
 def uq(teacher_id):
     user_quest = UserQuest.query.filter_by(teacher_id=teacher_id)
     user_quest = app_uq_lst(user_quest)
-    for uq in user_quest:
-        if uq["done"] != True:
-            user_quest.remove(uq)
-        elif uq["check"] == True:
-            user_quest.remove(uq)
+    for a in user_quest:
+        if a["done"] != True:
+            user_quest.remove(a)
+        elif a["check"] == True:
+            user_quest.remove(a)
 
     db.session.remove()
 
