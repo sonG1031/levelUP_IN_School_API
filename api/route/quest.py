@@ -99,7 +99,7 @@ def app_quest(teacher_id): # 자신이 생성한 퀘스트 보기(GET), 퀘스�
 
 @bp.route("/app/<string:teacher_id>/<int:id>", methods=["GET", "PUT", "DELETE"])
 @login_required
-def quest_handle(teacher_id, id):
+def quest_detail(teacher_id, id):
     q = QuestList.query.get(id)
 
     if request.method == 'GET': # 상세보기
@@ -150,15 +150,29 @@ def quest_handle(teacher_id, id):
 @login_required
 def uq(teacher_id):
     user_quest = UserQuest.query.filter_by(teacher_id=teacher_id)
-    user_quest = app_uq(user_quest)
+    user_quest = app_uq_lst(user_quest)
     for uq in user_quest:
-        if uq["done"] != True:
+        if uq["done"] != True or uq["check"] == True:
             user_quest.remove(uq)
     db.session.remove()
 
     return jsonify({
         "code": 1,
         "msg": "학급확인 목록 반환!",
+        "data": user_quest,
+    })
+
+
+@bp.route("/app/uq/<string:teacher_id>/<int:id>", methods=["GET"])
+@login_required
+def uq_detail(teacher_id, id):
+    user_quest = UserQuest.query.get(id)
+    user_quest = app_uq(user_quest)
+    db.session.remove()
+
+    return jsonify({
+        "code": 1,
+        "msg": "학급확인 상세 보기",
         "data": user_quest,
     })
 
@@ -281,7 +295,8 @@ def serializable_userQuest(info_list):
             }
         )
     return lst
-def app_uq(info_list):
+
+def app_uq_lst(info_list):
     lst = []
     for info in info_list:
         lst.append(
@@ -331,4 +346,20 @@ def serializable_quest(info):
                 "point":info.point,
                 "teacher_id": info.teacher_id,
                 "class_code": info.class_code
+            }
+
+def app_uq(info):
+            return {
+                "id": info.id,
+                "title": info.title,
+                "description": info.description,
+                "start_date": info.start_date.strftime('%Y-%m-%d'),
+                "end_date": info.end_date.strftime('%Y-%m-%d'),
+                "user_id": info.user_id,
+                # "teacher_id": info.teacher_id,
+                "exp": info.exp,
+                "point": info.point,
+                "done": info.done,
+                # "check": info.check,
+                # "questlst_id":info.questlst_id
             }
