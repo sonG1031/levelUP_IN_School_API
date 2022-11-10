@@ -192,7 +192,7 @@ def app_check(teacher_id, id):
         return jsonify({
             "code": 1,
             "msg": "퀘스트 완료 요청을 수락하였습니다.",
-            "data"
+            # "data"
         })
     else:
         return jsonify({
