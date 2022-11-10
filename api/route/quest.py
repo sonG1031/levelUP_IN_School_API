@@ -157,9 +157,11 @@ def uq(teacher_id):
         if user_quest[i]["done"] != True:
             del user_quest[i]
             length -= 1
+            i -= 1
         elif user_quest[i]["check"] == True:
             del user_quest[i]
             length -= 1
+            i -= 1
         i += 1
     db.session.remove()
     print(user_quest)
