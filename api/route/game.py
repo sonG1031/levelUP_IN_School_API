@@ -2,7 +2,7 @@ from flask import Blueprint, request, jsonify
 
 from api import db
 from api.route.auth import login_required
-from api.models import SchoolClass, Game, Inventory
+from api.models import SchoolClass, Game, Inventory, User
 
 bp = Blueprint('game', __name__, url_prefix='/game')
 
@@ -55,6 +55,7 @@ def before_connect():
 
 
 @bp.route('/level_up/', methods=['POST'])
+@login_required
 def level_up():
     g = Game.query.filter_by(user_id=request.json['user_id']).first()
     g.level = request.json['level']
@@ -69,7 +70,9 @@ def level_up():
         "msg": "레벨업!",
     })
 
+
 @bp.route('/buy/<string:user_id>', methods=['POST','GET'])
+@login_required
 def buy(user_id):
     if request.method == "POST":
         g = Game.query.filter_by(user_id=user_id).first()
@@ -95,3 +98,17 @@ def buy(user_id):
             "msg": "인벤토리 반환!",
             "data": data
         })
+
+
+# @bp.route('/ranking/<string:school_code>/<string:class_code>', methods=['GET'])
+# @login_required
+# def rank(school_code, class_code):
+#     school_lst = list(User.query.filter_by(school_code=school_code))
+#     class_lst = list(User.query.filter_by(class_code=class_code))
+#     for i in range(0, len(school_lst)):
+#         if school_lst[i].isStudent == False:
+#             del school_lst[i]
+#         school_lst[i] = school_lst[i].game_set[0].exp
+#
+#     for i in range(0, len(class_lst)):
+#         class_lst[i] = class_lst[i].game_set[0].exp

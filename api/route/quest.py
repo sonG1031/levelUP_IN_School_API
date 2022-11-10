@@ -150,7 +150,10 @@ def quest_handle(teacher_id, id):
 @login_required
 def uq(teacher_id):
     user_quest = UserQuest.query.filter_by(teacher_id=teacher_id)
-    user_quest = serializable_userQuest(user_quest)
+    user_quest = app_uq(user_quest)
+    for uq in user_quest:
+        if uq["done"] != True:
+            user_quest.remove(uq)
     db.session.remove()
 
     return jsonify({
@@ -219,6 +222,7 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
 
 
 @bp.route('/game/reward/', methods=['POST'])
+@login_required
 def game_reward():
     game_info = Game.query.filter_by(user_id=request.json['user_id']).first()
     reward_info = UserQuest.query.filter((UserQuest.user_id == request.json['user_id']) | (UserQuest.id == request.json['id'])).first()
@@ -277,7 +281,26 @@ def serializable_userQuest(info_list):
             }
         )
     return lst
-
+def app_uq(info_list):
+    lst = []
+    for info in info_list:
+        lst.append(
+            {
+                "id": info.id,
+                "title": info.title,
+                "description": info.description,
+                "start_date": info.start_date.strftime('%Y-%m-%d'),
+                "end_date": info.end_date.strftime('%Y-%m-%d'),
+                "user_id": info.user_id,
+                # "teacher_id": info.teacher_id,
+                "exp": info.exp,
+                "point": info.point,
+                "done": info.done,
+                # "check": info.check,
+                # "questlst_id":info.questlst_id
+            }
+        )
+    return lst
 
 def serializable_questList(info_list):
     lst = []
