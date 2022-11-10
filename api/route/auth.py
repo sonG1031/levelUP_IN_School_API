@@ -1,8 +1,10 @@
+import datetime
+
 from flask import request, jsonify, Response, json, Blueprint
 
+import making_code
 from api import db
 from api.models import User, SchoolClass, Game
-
 import bcrypt, jwt
 from config import JWT_SECRET_KEY
 from functools import wraps
@@ -96,6 +98,9 @@ def login():
                 "point": game.point
             }
         }, ensure_ascii=False)
+
+        user.qr = making_code.make_qr()
+        db.session.commit()
 
         db.session.remove()
         response = Response(body)

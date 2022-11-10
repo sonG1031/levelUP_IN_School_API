@@ -15,6 +15,16 @@ def rand_code():
 
     return [school_code, class_code]
 
+def make_qr():
+    lower = string.ascii_lowercase
+    upper = string.ascii_uppercase
+    num = string.digits
+
+    all = lower + upper + num
+    tmp = random.sample(all, 15)
+    code = r"".join(tmp)
+    return code
+
 # qV8ugGBVT3Ditm0VxXbu
 # ['7TokPeTWfH', '7TokPeTWfHPxbZNLikCy']
 # ['J605kkDwTe', 'J605kkDwTee6sVDwV8GE']
