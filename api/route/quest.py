@@ -177,12 +177,12 @@ def uq_detail(teacher_id, id):
     })
 
 
-@bp.route("/app/check/<string:teacher_id>", methods=['POST'])
+@bp.route("/app/check/<string:teacher_id>/<int:id>", methods=['PUT'])
 @login_required
-def app_check(teacher_id):
+def app_check(teacher_id, id):
     user = User.query.filter_by(user_id=teacher_id).first()
     if user.isStudent == False:
-        q = UserQuest.query.filter(and_(UserQuest.user_id == request.json['user_id'], UserQuest.id == request.json['id'])).first()
+        q = UserQuest.get(id)
         q.check = True
         db.session.commit()
         db.session.remove()
@@ -311,7 +311,7 @@ def app_uq_lst(info_list):
                 "exp": info.exp,
                 "point": info.point,
                 "done": info.done,
-                # "check": info.check,
+                "check": info.check,
                 # "questlst_id":info.questlst_id
             }
         )
@@ -360,6 +360,6 @@ def app_uq(info):
                 "exp": info.exp,
                 "point": info.point,
                 "done": info.done,
-                # "check": info.check,
+                "check": info.check,
                 # "questlst_id":info.questlst_id
             }
