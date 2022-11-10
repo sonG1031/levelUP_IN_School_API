@@ -152,8 +152,11 @@ def uq(teacher_id):
     user_quest = UserQuest.query.filter_by(teacher_id=teacher_id)
     user_quest = app_uq_lst(user_quest)
     for uq in user_quest:
-        if uq["done"] != True or uq["check"] == True:
+        if uq["done"] != True:
             user_quest.remove(uq)
+        elif uq["check"] == True:
+            user_quest.remove(uq)
+
     db.session.remove()
 
     return jsonify({
@@ -189,6 +192,7 @@ def app_check(teacher_id, id):
         return jsonify({
             "code": 1,
             "msg": "퀘스트 완료 요청을 수락하였습니다.",
+            "data"
         })
     else:
         return jsonify({
