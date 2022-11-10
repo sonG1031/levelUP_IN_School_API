@@ -182,7 +182,7 @@ def uq_detail(teacher_id, id):
 def app_check(teacher_id, id):
     user = User.query.filter_by(user_id=teacher_id).first()
     if user.isStudent == False:
-        q = UserQuest.get(id)
+        q = UserQuest.query.get(id)
         q.check = True
         db.session.commit()
         db.session.remove()
