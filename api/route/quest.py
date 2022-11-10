@@ -151,18 +151,11 @@ def quest_detail(teacher_id, id):
 def uq(teacher_id):
     user_quest = UserQuest.query.filter_by(teacher_id=teacher_id)
     user_quest = app_uq_lst(user_quest)
-    length = len(user_quest)
-    i = 0
-    while length > 0:
-        if user_quest[i]["done"] != True:
-            del user_quest[i]
-            length -= 1
-            i -= 1
-        elif user_quest[i]["check"] == True:
-            del user_quest[i]
-            length -= 1
-            i -= 1
-        i += 1
+    for uq in user_quest[:]:
+        if uq["done"] != True:
+            user_quest.remove(uq)
+        elif uq["check"] == True:
+            user_quest.remove(uq)
     db.session.remove()
     print(user_quest)
     return jsonify({
