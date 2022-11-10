@@ -158,7 +158,7 @@ def uq(teacher_id):
             user_quest.remove(a)
 
     db.session.remove()
-
+    print(user_quest)
     return jsonify({
         "code": 1,
         "msg": "학급확인 목록 반환!",
