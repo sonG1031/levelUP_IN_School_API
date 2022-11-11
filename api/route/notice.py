@@ -25,9 +25,11 @@ def app_notice(teacher_id):
             db.session.add(notice)
             db.session.commit()
             db.session.remove()
+            notice = serializable_Notice(notice)
             return jsonify({
                 "code": 1,
                 "msg": "공지사항 추가 성공!",
+                "data": notice
             })
         elif request.method == "GET":
             notice = Notice.query.filter_by(teacher_id=teacher_id)
