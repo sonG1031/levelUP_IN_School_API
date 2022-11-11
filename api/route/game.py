@@ -114,8 +114,8 @@ def rank(school_code, class_code):
             continue
         sl = {
             "user_id": sl.game_set[0].user_id,
-            "exp": sl.game_set.exp,
-            "point": sl.game_set.point
+            "exp": sl.game_set[0].exp,
+            "point": sl.game_set[0].point
         }
         whole_rank.append(sl)
 
