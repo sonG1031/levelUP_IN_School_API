@@ -45,8 +45,7 @@ def qr_check(code):
 
         return jsonify({
             "code" : 1,
-            "msg" : f"{data['exp']} 경험치 획득!, {data['point']}포인트 획득!",
-            "data" : data
+            "msg" : [f"{data['exp']} 경험치 획득!", f"{data['point']}포인트 획득!"]
         })
 
 

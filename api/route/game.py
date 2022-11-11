@@ -111,6 +111,7 @@ def rank(school_code, class_code):
     for sl in school_lst[:]:
         if sl.isStudent == False:
             school_lst.remove(sl)
+            continue
         sl = {
             "user_id": sl.game_set[0].user_id,
             "exp": sl.game_set.exp,
@@ -137,6 +138,7 @@ def rank(school_code, class_code):
         "whole_rank" : whole_rank,
         # "class_rank" : class_rank
     })
+
 
 @bp.route('/addExp/<string:user_id>', methods=['POST'])
 @login_required
