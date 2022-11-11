@@ -105,8 +105,8 @@ def buy(user_id):
 def rank(school_code, class_code):
     school_lst = list(User.query.filter_by(school_code=school_code))
     whole_rank = []
-    class_lst = list(User.query.filter_by(class_code=class_code))
-    class_rank = []
+    # class_lst = list(User.query.filter_by(class_code=class_code))
+    # class_rank = []
 
     for sl in school_lst[:]:
         if sl.isStudent == False:
@@ -118,24 +118,24 @@ def rank(school_code, class_code):
         }
         whole_rank.append(sl)
 
-    for cl in class_lst[:]:
-        if cl.isStudent == False:
-            class_lst.remove(cl)
-        cl = {
-            "user_id" :  cl.game_set[0].user_id,
-            "exp" : cl.game_set.exp,
-            "point" : cl.game_set.point
-        }
-        class_rank.append(cl)
+    # for cl in class_lst[:]:
+    #     if cl.isStudent == False:
+    #         class_lst.remove(cl)
+    #     cl = {
+    #         "user_id" :  cl.game_set[0].user_id,
+    #         "exp" : cl.game_set.exp,
+    #         "point" : cl.game_set.point
+    #     }
+    #     class_rank.append(cl)
 
     whole_rank = sorted(whole_rank, key=lambda x: (x["exp"], x["point"]), reverse=True)
-    class_rank = sorted(class_rank, key=lambda x: (x["exp"], x["point"]), reverse=True)  # 경험치를 기준으로 순위
+    # class_rank = sorted(class_rank, key=lambda x: (x["exp"], x["point"]), reverse=True)  # 경험치를 기준으로 순위
 
     return jsonify({
         "code" : 1,
         "msg" : "랭킹 반환!",
         "whole_rank" : whole_rank,
-        "class_rank" : class_rank
+        # "class_rank" : class_rank
     })
 
 @bp.route('/addExp/<string:user_id>', methods=['POST'])
