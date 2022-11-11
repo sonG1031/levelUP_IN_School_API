@@ -10,7 +10,7 @@ migrate = Migrate()
 def create_app(): # <-- 애플리케이션 팩토리
     app = Flask(__name__)
 
-    app.config.from_object(config)
+    app.config.from_envvar('APP_CONFIG_FILE')
 
     # ORM
     db.init_app(app)
