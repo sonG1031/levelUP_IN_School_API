@@ -207,14 +207,15 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
     if user.isStudent == True:
         if request.method == "GET":
             now = datetime.datetime.now()
-            user_quest = UserQuest.query.filter(and_(UserQuest.user_id == user_id, UserQuest.start_date <= now <= UserQuest.end_date))
-            user_quest = serializable_userQuest(user_quest)
-            db.session.remove()
-            return jsonify({
-                "code": 1,
-                "msg": "유저 퀘스트 목록 반환!",
-                "data": user_quest
-            })
+            user_quest = UserQuest.query.filter_by(user_id=user_id)
+            if user_quest.start_date <= now <= user_quest.end_date:
+                user_quest = serializable_userQuest(user_quest)
+                db.session.remove()
+                return jsonify({
+                    "code": 1,
+                    "msg": "유저 퀘스트 목록 반환!",
+                    "data": user_quest
+                })
         elif request.method == "POST": # 퀘스트 완료 요청
             user_quest = UserQuest.query.filter(and_(UserQuest.user_id == user_id, UserQuest.id == request.json['id'])).first()
             now = datetime.datetime.now()
