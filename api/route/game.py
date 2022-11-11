@@ -100,21 +100,6 @@ def buy(user_id):
         })
 
 
-@bp.route('/qr/<string:user_id>', methods=["GET"])
-@login_required
-def qr(user_id):
-    user = User.query.filter_by(user_id=user_id).first()
-    if not user:
-        return jsonify({
-            "code": -1,
-            "msg": "존재하지 않는 사용자",
-        })
-    return jsonify({
-        "code": 1,
-        "msg": "qr 반환",
-        "qr": user.qr
-    })
-
 @bp.route('/ranking/<string:school_code>/<string:class_code>', methods=['GET'])
 @login_required
 def rank(school_code, class_code):

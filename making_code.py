@@ -29,14 +29,15 @@ def make_qr():
 # ['7TokPeTWfH', '7TokPeTWfHPxbZNLikCy']
 # ['J605kkDwTe', 'J605kkDwTee6sVDwV8GE']
 # ['sJVuOVg20a', 'sJVuOVg20aElZurkds1O']
-#
+# datetime.time(8, 20, 0) 학교 등교시간
 # from api.models import *
 # from api import db
-# s = School(school_code='qV8ugGBVT3', school_name='한양공업고등학교')
+# import datetime
+# s = School(school_code='qV8ugGBVT3', school_name='한양공업고등학교', school_time=datetime.time(8, 20, 0))
 # c = SchoolClass(school_code='qV8ugGBVT3', class_code='qV8ugGBVT3Ditm0VxXbu', class_name="2컴넷B")
-# s1 = School(school_code='7TokPeTWfH', school_name='test_school1')
-# s2 = School(school_code='J605kkDwTe', school_name='test_school2')
-# s3 = School(school_code='sJVuOVg20a', school_name='test_school3')
+# s1 = School(school_code='7TokPeTWfH', school_name='test_school1', school_time=datetime.time(8, 10, 0))
+# s2 = School(school_code='J605kkDwTe', school_name='test_school2', school_time=datetime.time(8, 15, 0))
+# s3 = School(school_code='sJVuOVg20a', school_name='test_school3', school_time=datetime.time(8, 25, 0))
 # c1 = SchoolClass(school_code='7TokPeTWfH', class_code='7TokPeTWfHPxbZNLikCy', class_name="3학년 1반")
 # c2 = SchoolClass(school_code='J605kkDwTe', class_code='J605kkDwTee6sVDwV8GE', class_name="3학년 2반")
 # c3 = SchoolClass(school_code='sJVuOVg20a', class_code='sJVuOVg20aElZurkds1O', class_name="3학년 3반")
