@@ -32,7 +32,7 @@ class User(db.Model):
     school_class = db.relationship('SchoolClass', backref=db.backref('user_set', cascade='all, delete-orphan'))
     qr = db.Column(db.String(200), nullable=True, unique=True)
     qr_date = db.Column(db.DateTime(), nullable=True)
-    qr_checked = db.Column(db.Boolean, server_default="", nullable=True)
+    qr_checked = db.Column(db.Boolean, server_default="False", nullable=True)
 
 
 class Game(db.Model):
@@ -57,8 +57,8 @@ class UserQuest(db.Model):
     user_id = db.Column(db.String(200), db.ForeignKey('user.user_id', ondelete='CASCADE'), nullable=False)
     teacher_id = db.Column(db.String(200), nullable=False) # 자기가 만든 퀘스트가 뭔지 알기 위해서
     user = db.relationship('User', backref=db.backref('Quest_set', cascade='all, delete-orphan'))
-    done = db.Column(db.Boolean, server_default="", nullable=True)
-    check = db.Column(db.Boolean, server_default="", nullable=True)
+    done = db.Column(db.Boolean, server_default="False", nullable=True)
+    check = db.Column(db.Boolean, server_default="False", nullable=True)
     questlst_id = db.Column(db.Integer, db.ForeignKey('quest_list.id', ondelete='CASCADE'), nullable=False)
     questlst = db.relationship('QuestList', backref=db.backref('QuestList_set', cascade='all, delete-orphan'))
 
