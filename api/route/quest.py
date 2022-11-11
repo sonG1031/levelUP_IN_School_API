@@ -206,16 +206,14 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
     user = User.query.filter_by(user_id = user_id).first()
     if user.isStudent == True:
         if request.method == "GET":
-            now = datetime.datetime.now()
             user_quest = UserQuest.query.filter_by(user_id=user_id)
-            if user_quest.start_date <= now <= user_quest.end_date:
-                user_quest = serializable_userQuest(user_quest)
-                db.session.remove()
-                return jsonify({
-                    "code": 1,
-                    "msg": "유저 퀘스트 목록 반환!",
-                    "data": user_quest
-                })
+            user_quest = serializable_userQuest(user_quest)
+            db.session.remove()
+            return jsonify({
+                "code": 1,
+                "msg": "유저 퀘스트 목록 반환!",
+                "data": user_quest
+            })
         elif request.method == "POST": # 퀘스트 완료 요청
             user_quest = UserQuest.query.filter(and_(UserQuest.user_id == user_id, UserQuest.id == request.json['id'])).first()
             now = datetime.datetime.now()
@@ -289,23 +287,25 @@ def check_quest_date():
 
 def serializable_userQuest(info_list):
     lst = []
+    now = datetime.datetime.now()
     for info in info_list:
-        lst.append(
-            {
-                "id": info.id,
-                "title": info.title,
-                "description": info.description,
-                "start_date": info.start_date.strftime('%Y-%m-%d'),
-                "end_date": info.end_date.strftime('%Y-%m-%d'),
-                "user_id": info.user_id,
-                "teacher_id": info.teacher_id,
-                "exp":info.exp,
-                "point":info.point,
-                "done": info.done,
-                "check": info.check,
-                # "questlst_id":info.questlst_id
-            }
-        )
+        if info.start_date <= now <= info.end_date:
+            lst.append(
+                {
+                    "id": info.id,
+                    "title": info.title,
+                    "description": info.description,
+                    "start_date": info.start_date.strftime('%Y-%m-%d'),
+                    "end_date": info.end_date.strftime('%Y-%m-%d'),
+                    "user_id": info.user_id,
+                    "teacher_id": info.teacher_id,
+                    "exp":info.exp,
+                    "point":info.point,
+                    "done": info.done,
+                    "check": info.check,
+                    # "questlst_id":info.questlst_id
+                }
+            )
     return lst
 
 def app_uq_lst(info_list):
