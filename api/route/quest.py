@@ -259,8 +259,8 @@ def game_reward():
         game_info.point += reward_info.point
         game_info.exp += reward_info.exp
         data = {
-            "exp" : game_info.exp,
-            "point" : game_info.point
+            "exp" : reward_info.exp,
+            "point" : reward_info.point
         }
     else:
         return jsonify({
