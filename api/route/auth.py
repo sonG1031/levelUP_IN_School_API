@@ -6,7 +6,7 @@ import making_code
 from api import db
 from api.models import User, SchoolClass, Game
 import bcrypt, jwt
-from config import JWT_SECRET_KEY
+from config.default import JWT_SECRET_KEY
 from functools import wraps
 
 from email_validator import validate_email, EmailNotValidError
