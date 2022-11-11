@@ -31,6 +31,8 @@ class User(db.Model):
     class_code = db.Column(db.String(200), db.ForeignKey('school_class.class_code', ondelete='CASCADE'),  nullable=False)
     school_class = db.relationship('SchoolClass', backref=db.backref('user_set', cascade='all, delete-orphan'))
     qr = db.Column(db.String(200), nullable=True, unique=True)
+    qr_date = db.Column(db.DateTime(), nullable=True)
+    qr_checked = db.Column(db.Boolean, server_default='', nullable=True)
 
 
 class Game(db.Model):

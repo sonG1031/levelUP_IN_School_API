@@ -98,8 +98,9 @@ def login():
                 "point": game.point
             }
         }, ensure_ascii=False)
-
-        user.qr = making_code.make_qr()
+        if user.qr_checked != True:
+            user.qr = making_code.make_qr()
+            user.qr_date = datetime.datetime.now()
         db.session.commit()
 
         db.session.remove()

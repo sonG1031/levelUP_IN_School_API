@@ -1,5 +1,6 @@
 from flask import Blueprint, request,jsonify
 
+import making_code
 from api import db
 
 from api.models import User, School, Game
@@ -13,15 +14,12 @@ bp = Blueprint('qr', __name__, url_prefix='/qr')
 @login_required
 def qr(user_id):
     user = User.query.filter_by(user_id=user_id).first()
-    if not user:
-        return jsonify({
-            "code": -1,
-            "msg": "존재하지 않는 사용자",
-        })
+    qr_ = user.qr
+    db.session.remove()
     return jsonify({
         "code": 1,
         "msg": "qr 반환",
-        "qr": user.qr
+        "qr": qr_
     })
 
 
@@ -32,10 +30,22 @@ def qr_check(code):
     school = School.query.filter_by(school_code=user.school_code).first()
     now = datetime.datetime.now()
 
+    if now >= user.qr_date + datetime.timedelta(hours=24):
+        user.qr_checked = False
+        user.qr = making_code.make_qr()
+        user.qr_date = datetime.datetime.now()
+        db.session.commit()
+        db.session.remove()
+
+        return jsonify({
+            "code" : 1,
+            "msg" : "QR 초기화"
+        })
     if now.time() < school.school_time:
         game = Game.query.filter_by(user_id=user.user_id).first()
         game.exp += int(game.max_exp * 0.1)
         game.point += 100
+        user.qr_checked = True
         db.session.commit()
         data = {
             "exp": int(game.max_exp * 0.1),
