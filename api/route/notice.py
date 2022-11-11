@@ -24,8 +24,8 @@ def app_notice(teacher_id):
             )
             db.session.add(notice)
             db.session.commit()
-            db.session.remove()
             notice = serializable_Notice(notice)
+            db.session.remove()
             return jsonify({
                 "code": 1,
                 "msg": "공지사항 추가 성공!",
