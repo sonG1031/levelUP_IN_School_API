@@ -41,7 +41,7 @@ def qr_check(code):
             "code" : 1,
             "msg" : "QR 초기화"
         })
-    if now.time() < school.school_time:
+    if user.qr_checked == False and now.time() < school.school_time:
         game = Game.query.filter_by(user_id=user.user_id).first()
         game.exp += int(game.max_exp * 0.1)
         game.point += 100
