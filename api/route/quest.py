@@ -245,11 +245,11 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
         })
 
 
-@bp.route('/game/reward/', methods=['POST'])
+@bp.route('/game/reward/<string:user_id>', methods=['POST'])
 @login_required
-def game_reward():
-    game_info = Game.query.filter_by(user_id=request.json['user_id']).first()
-    reward_info = list(UserQuest.query.filter(and_(UserQuest.user_id == request.json['user_id'], UserQuest.id == request.json['id'])))[0]
+def game_reward(user_id):
+    game_info = Game.query.filter_by(user_id=user_id).first()
+    reward_info = list(UserQuest.query.filter(and_(UserQuest.user_id == user_id, UserQuest.id == request.json['id'])))[0]
     if reward_info is None:
         return jsonify({
             "code": -1,
