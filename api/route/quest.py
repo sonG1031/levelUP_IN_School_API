@@ -200,7 +200,7 @@ def app_check(teacher_id, id):
         })
 
 
-@bp.route("/game/<string:user_id>", methods=["GET", "PUT"])
+@bp.route("/game/<string:user_id>", methods=["GET", "POST"])
 @login_required
 def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스트 완료요청 보내기(POST)
     user = User.query.filter_by(user_id = user_id).first()
@@ -214,8 +214,8 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
                 "msg": "유저 퀘스트 목록 반환!",
                 "data": user_quest
             })
-        elif request.method == "PUT": # 퀘스트 완료 요청
-            user_quest = UserQuest.query.filter_by(user_id=user_id).first()
+        elif request.method == "POST": # 퀘스트 완료 요청
+            user_quest = UserQuest.query.filter_by(user_id=user_id).filter_by(id=request.json['id']).first()
             now = datetime.datetime.now()
 
             if user_quest.create_date > now:
