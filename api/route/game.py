@@ -137,3 +137,17 @@ def rank(school_code, class_code):
         "whole_rank" : whole_rank,
         "class_rank" : class_rank
     })
+
+@bp.route('/addExp/<string:user_id>', methods=['POST'])
+@login_required
+def add_exp(user_id):
+    g = Game.query.filter_by(user_id=user_id).first()
+    g.exp = request.json['exp']
+
+    db.session.commit()
+    db.session.remove()
+    return jsonify({
+        "code" : 1,
+        "msg" : "경험치 저장 완료!"
+    })
+
