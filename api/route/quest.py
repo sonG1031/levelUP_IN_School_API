@@ -218,7 +218,7 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
             user_quest = UserQuest.query.filter_by(user_id=user_id).filter_by(id=request.json['id']).first()
             now = datetime.datetime.now()
 
-            if user_quest.create_date > now:
+            if user_quest.start_date > now:
                 return jsonify({
                     "code": -1,
                     "msg": "퀘스트가 아직 활성화되지 않았습니다.",
