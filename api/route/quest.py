@@ -249,7 +249,7 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
 @login_required
 def game_reward():
     game_info = Game.query.filter_by(user_id=request.json['user_id']).first()
-    reward_info = UserQuest.query.filter((UserQuest.user_id == request.json['user_id']) | (UserQuest.id == request.json['id'])).first()
+    reward_info = list(UserQuest.query.filter(and_(UserQuest.user_id == request.json['user_id'], UserQuest.id == request.json['id'])))[0]
     if reward_info is None:
         return jsonify({
             "code": -1,
@@ -258,6 +258,10 @@ def game_reward():
     elif reward_info.check == True:
         game_info.point += reward_info.point
         game_info.exp += reward_info.exp
+        data = {
+            "exp" : game_info.exp,
+            "point" : game_info.point
+        }
     else:
         return jsonify({
             "code" : -1,
@@ -270,6 +274,7 @@ def game_reward():
     return jsonify({
         "code" : 1,
         "msg" : "보상 수령!",
+        "data" : data
     })
 #================================================================================
 
