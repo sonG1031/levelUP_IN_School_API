@@ -215,7 +215,7 @@ def game_quest(user_id): # 자신의 퀘스트 목록 가져오기(GET), 퀘스�
                 "data": user_quest
             })
         elif request.method == "POST": # 퀘스트 완료 요청
-            user_quest = UserQuest.query.filter(and_(UserQuest.user_id == user_id, UserQuest.id == request.json['id']))
+            user_quest = list(UserQuest.query.filter(and_(UserQuest.user_id == user_id, UserQuest.id == request.json['id'])))[0]
             now = datetime.datetime.now()
 
             if user_quest.start_date > now:
