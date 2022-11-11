@@ -5,7 +5,7 @@ class School(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     school_code = db.Column(db.String(200), unique=True, nullable=False)
     school_name = db.Column(db.String(200), nullable=False)
-    school_time = db.Column(db.Time(), nullable=True)
+    school_time = db.Column(db.Time(), nullable=False)
 
 
 class SchoolClass(db.Model):
