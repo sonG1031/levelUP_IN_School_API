@@ -61,12 +61,12 @@ def qr_check(code):
         })
     if user.qr_checked == False and now.time() < school.school_time:
         game = Game.query.filter_by(user_id=user.user_id).first()
-        game.exp += int(game.max_exp * 0.1)
+        game.exp += int(game.max_exp * 0.2)
         game.point += 100
         user.qr_checked = True
         db.session.commit()
         data = {
-            "exp": int(game.max_exp * 0.1),
+            "exp": int(game.max_exp * 0.2),
             "point": 100
         }
         db.session.remove()
