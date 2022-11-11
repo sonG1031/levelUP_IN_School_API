@@ -23,6 +23,24 @@ def qr(user_id):
     })
 
 
+@bp.route('/updateExp/<string:user_id>', methods=["GET"])
+@login_required
+def update_exp(user_id):
+    user = User.query.filter_by(user_id=user_id).first()
+    game = Game.query.filter_by(user_id=user.user_id).first()
+    exp = game.exp
+    level = game.level
+    max_exp = game.max_exp
+    point = game.point
+
+    return jsonify({
+        "exp" : exp,
+        "level" : level,
+        "max_exp" : max_exp,
+        "point" : point
+    })
+
+
 @bp.route('/cam/<string:code>', methods=["GET"])
 # @login_required
 def qr_check(code):
