@@ -124,8 +124,8 @@ def quest_detail(teacher_id, id):
                 "description" : q.description,
                 "exp" : q.exp,
                 "point" : q.point,
-                "start_date" : q.start_date.strftime('%Y-%m-%d'),
-                "end_date" : q.end_date.strftime('%Y-%m-%d'),
+                "start_date" : q.start_date,
+                "end_date" : q.end_date,
                 "class_code" : q.class_code
             }
 
