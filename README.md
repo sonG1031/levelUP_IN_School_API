@@ -1,5 +1,5 @@
 # 학교에서 레벨업 API (levelUP IN School API)
-
+# 전국대회 2등함ㅎㅎ  
 ### 가상환경
 > ~/venvs> python3 -m venv swcontest  
 > python -m venv는 파이썬 모듈 중 venv라는 모듈을 사용한다는 의미, 그 뒤는 가상환경 이름  
