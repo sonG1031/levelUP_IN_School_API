@@ -18,7 +18,6 @@ class SchoolClass(db.Model):
     chat_port = db.Column(db.String(200), nullable=True) # 멀티룸을 구현하기 위해! 채팅 목적
 
 
-
 class User(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.String(200), unique=True, nullable=False)
