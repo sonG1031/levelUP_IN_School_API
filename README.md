@@ -1,7 +1,5 @@
 # 학교에서 레벨업 API (levelUP IN School API)
 
-# 전국대회 2등함ㅎㅎ
-
 <img src="poster.jpeg">
 
 ### 가상환경
